@@ -19,47 +19,26 @@ SHIP = 'S'
 
 def create_board():
     """Create an empty board filled with water."""
-    return [[WATER for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
+    pass
 
 def display_board(board):
-    """Display the board with coordinates (1-indexed). Hide ships if hide_ships=True."""
+    """Display the board with coordinates (1-indexed)"""
+    # board is 0-indexed. 
     # Create column headers with proper alignment
-    col_headers = []
-    for i in range(1, BOARD_SIZE + 1):
-        if i == 10:
-            col_headers.append(str(i))
-        else:
-            col_headers.append(f" {i}")
     
-    print("\n     " + " ".join(col_headers))
-    print("   " + "-" * (len(" ".join(col_headers)) + 1))
+    # Print column headers
     
+    # Iterate over the board. If cell is a ship, display a water cell, otherwise display the cell. In each inner loop, remember to print the row number in the leftmost column.
     for i in range(BOARD_SIZE):
-        row_display = []
-        for j in range(BOARD_SIZE):
-            cell = board[i][j]
-            # Hide unhit ships from player view
-            if cell == SHIP:
-                row_display.append(WATER)
-            else:
-                row_display.append(cell)
-        # Row numbers are 1-indexed, right-aligned to 2 characters
-        print(f"{i+1:2} | " + " ".join(f" {cell}" for cell in row_display))
+        pass
 
 def is_valid_position(board, row, col, length, direction):
     """Check if ship placement is valid."""
+    # For each direction, check if the ship can be placed on the board. If it can, make sure the ship does not overlap with any other ship. If it does, return False. If it doesn't, return True.
     if direction == 'horizontal':
-        if col + length > BOARD_SIZE:
-            return False
-        for c in range(col, col + length):
-            if board[row][c] != WATER:
-                return False
+        pass
     else:  # vertical
-        if row + length > BOARD_SIZE:
-            return False
-        for r in range(row, row + length):
-            if board[r][col] != WATER:
-                return False
+        pass
     return True
 
 def place_ship(board, row, col, length, direction):
@@ -73,70 +52,36 @@ def place_ship(board, row, col, length, direction):
 
 def place_ships_randomly(board, ships):
     """Randomly place all ships on the board."""
+    # For each ship, try to place it on the board. If it can't be placed, try again. Use randomness to choose the direction and the position. Use the is_valid_position function to check if the ship can be placed. Use the place_ship function to place the ship on the board.
     for ship_name, ship_length in ships:
         placed = False
         attempts = 0
         max_attempts = 100
         
         while not placed and attempts < max_attempts:
-            row = random.randint(0, BOARD_SIZE - 1)
-            col = random.randint(0, BOARD_SIZE - 1)
-            direction = random.choice(['horizontal', 'vertical'])
-            
-            if is_valid_position(board, row, col, ship_length, direction):
-                place_ship(board, row, col, ship_length, direction)
-                placed = True
-            
-            attempts += 1
+            pass
         
-        if not placed:
-            print(f"Warning: Could not place {ship_name}")
 
 def get_player_guess():
-    """Get coordinates from player input (1-indexed, converted to 0-indexed internally)."""
+    """Get coordinates from player input. Users will give us coordinates in 1 indexed format (like 3 5). We need to convert them to 0 indexed format (like 2 4)."""
+    # Takes the users input and validates if only 2 numbers are entered, if they are between 1 to 10, and they are valid numbers (not letters or special characters)
+
     while True:
         try:
-            guess = input("\nEnter your guess (row col), e.g., '3 5': ").strip().split()
-            if len(guess) != 2:
-                print("Please enter exactly two numbers separated by a space.")
-                continue
-            
-            row, col = int(guess[0]), int(guess[1])
-            
-            # Convert from 1-indexed to 0-indexed
-            row -= 1
-            col -= 1
-            
-            if 0 <= row < BOARD_SIZE and 0 <= col < BOARD_SIZE:
-                return row, col
-            else:
-                print(f"Coordinates must be between 1 and {BOARD_SIZE}.")
+            pass
         except ValueError:
             print("Please enter valid numbers.")
 
 def make_guess(board, row, col):
     """Make a guess and update the board. Return the result."""
-    cell = board[row][col]
-    
-    # Check if already guessed
-    if cell == HIT or cell == MISS:
-        return "already_guessed"
-    
-    # Check if it's a ship
-    if cell == SHIP:
-        board[row][col] = HIT
-        return "hit"
-    else:
-        board[row][col] = MISS
-        return "miss"
+    # Update the board with the guess, if it is a hit, return "hit", if it is a miss, return "miss", if it is already guessed, return "already_guessed"
+    pass
 
 def count_remaining_ships(board):
     """Count how many unhit ship parts are left."""
+    # Count the number of SHIP cells on the board
     count = 0
-    for row in board:
-        for cell in row:
-            if cell == SHIP:  # Only count unhit ships
-                count += 1
+    pass
     return count
 
 def clear_screen():
@@ -232,17 +177,10 @@ def play_battleships():
     print("\nFinal board with all ships revealed:")
     display_board(board)
     
-    # Ask if player wants to play again
+    # Ask if player wants to play again. If they say yes, play the game again. If they say no, print a goodbye message and exit the game. If they say anything else, just ask again.
     while True:
         play_again = input("\nWould you like to play again? (y/n): ").lower().strip()
-        if play_again in ['y', 'yes']:
-            play_battleships()
-            return
-        elif play_again in ['n', 'no']:
-            print("Thanks for playing Battleships! Goodbye! 👋")
-            return
-        else:
-            print("Please enter 'y' for yes or 'n' for no.")
+        pass
 
 if __name__ == "__main__":
     play_battleships()
